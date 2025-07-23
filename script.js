@@ -484,47 +484,67 @@ enhanceServiceCards();
 
 // Loading animation
 function showLoadingAnimation() {
+    // Prevent body scroll during loading
+    document.body.style.overflow = 'hidden';
+    
     const loader = document.createElement('div');
+    loader.className = 'page-loader';
     loader.innerHTML = `
-        <div style="
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--creamy-white) 0%, var(--blush-pink) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            flex-direction: column;
-        ">
-            <div style="
-                width: 60px;
-                height: 60px;
-                border: 4px solid var(--blush-pink);
-                border-top: 4px solid var(--rose-mauve);
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin-bottom: 1rem;
-            "></div>
-            <h3 style="
-                color: var(--rose-mauve);
-                font-family: 'Playfair Display', serif;
-                margin: 0;
-            ">Loading Beauty...</h3>
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <h3 class="loader-text">Loading Beauty...</h3>
         </div>
     `;
     
-    // Add spin animation
-    const spinStyles = document.createElement('style');
-    spinStyles.textContent = `
+    // Add loader styles (backup inline styles)
+    const loaderStyles = document.createElement('style');
+    loaderStyles.textContent = `
+        .page-loader {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: linear-gradient(135deg, #FFF7F5 0%, #F6D4D2 100%) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 99999 !important;
+            flex-direction: column !important;
+        }
+        
+        .loader-content {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        .loader-spinner {
+            width: 60px !important;
+            height: 60px !important;
+            border: 4px solid #F6D4D2 !important;
+            border-top: 4px solid #C86B85 !important;
+            border-radius: 50% !important;
+            animation: spin 1s linear infinite !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        .loader-text {
+            color: #C86B85 !important;
+            font-family: 'Playfair Display', serif !important;
+            margin: 0 !important;
+            font-size: 1.5rem !important;
+            font-weight: 600 !important;
+            text-align: center !important;
+        }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
     `;
-    document.head.appendChild(spinStyles);
+    document.head.appendChild(loaderStyles);
     
     document.body.appendChild(loader);
     
@@ -535,6 +555,8 @@ function showLoadingAnimation() {
             loader.style.transition = 'opacity 0.5s ease';
             setTimeout(() => {
                 loader.remove();
+                // Restore body scroll
+                document.body.style.overflow = '';
             }, 500);
         }, 1000);
     });
